@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JulianCRA/lets-start-again.git"
+    "url": "git+https://github.com/JulianCRA/hp-v4.git"
   },
   "keywords": [
     "new",
@@ -19,28 +19,29 @@
   "author": "Julian R.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JulianCRA/lets-start-again/issues"
+    "url": "https://github.com/JulianCRA/hp-v4/issues"
   },
-  "homepage": "https://github.com/JulianCRA/lets-start-again#readme",
+  "homepage": "https://github.com/JulianCRA/hp-v4#readme",
   "devDependencies": {
-    "@babel/core": "^7.4.0",
-    "@babel/plugin-proposal-class-properties": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
-    "@babel/preset-react": "^7.0.0",
-    "babel-loader": "^8.0.5",
+    "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.0",
+    "@babel/plugin-syntax-class-properties": "^7.2.0",
+    "@babel/preset-env": "^7.7.1",
+    "@babel/preset-react": "^7.7.0",
+    "babel-loader": "^8.0.6",
     "classnames": "^2.2.6",
-    "css-loader": "^2.1.1",
-    "file-loader": "^3.0.1",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
     "html-loader": "^0.5.5",
     "html-webpack-plugin": "^3.2.0",
-    "p5": "^0.7.3",
+    "p5": "^0.10.2",
     "prop-types": "^15.7.2",
-    "react": "^16.8.5",
-    "react-dom": "^16.8.5",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.29.6",
-    "webpack-bundle-analyzer": "^3.1.0",
-    "webpack-cli": "^3.3.0",
-    "webpack-dev-server": "^3.2.1"
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
   }
 }
