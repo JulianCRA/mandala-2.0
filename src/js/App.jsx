@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
-
-import Landing from './components/pages/Landing'
+import PropTypes from 'prop-types'
 
 export class App extends Component {
+	static propTypes = {
+		'name' : PropTypes.string
+	}
 
 	render() {
 		return (
 			<React.Fragment>
-				<Landing />
+				Welcome back, {this.props.name}
 			</React.Fragment>
 		)
 	}
