@@ -1,0 +1,337 @@
+.controls{
+    height: 100%;
+	width: 250px;
+	min-width: 200px;
+	display: flex;
+    flex-direction: column;
+    justify-content: start;
+	overflow-x: hidden;
+    padding: 1vh 0;
+    position: absolute;
+    z-index: 10;
+    bottom: 0;
+}
+
+.controls.left{
+	left: 0;
+}
+
+.controls.right{
+	margin-left: auto;
+	right: 0;
+}
+
+/*--------------------------*/
+
+.quickaccess{
+	padding: 5px 0;
+	display: flex;
+	justify-content: space-evenly;
+	background-color: #00000088;
+	width: 100%;
+    margin-bottom: 1vh;
+    border: solid 1px white;
+    z-index: 3;
+}
+
+.quickaccess.left{
+    border-radius: 0 10px 10px 0;
+    border-left: none;
+	flex-direction: row;
+}
+
+.quickaccess.right{
+    border-radius: 10px 0 0 10px;
+    border-right: none;
+	flex-direction: row-reverse;
+}
+
+/*--------------------------*/
+
+.tools-button{
+    position: relative;
+    border-radius:22px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+    margin:5px;
+    border:solid 2px transparent;
+    width: 40px;
+    height: 40px;
+    outline: none;
+    cursor: pointer;
+}
+.tools-button:hover {
+	border-color: #ffffff;
+    border-width: 2px;
+    border-style: solid;
+}
+.tools-button:active {
+	position:relative;
+	top:1px;
+}
+
+/*---------------------------*/
+
+.panels{
+    height: auto;
+	width: 100%;
+	position: relative;
+    flex: 1 1 auto;
+    pointer-events: none;
+}
+
+/*----------------------------*/
+
+.panel{
+	position: absolute;
+	background: #00000088;
+	width: 100%;
+	left: 0;
+	margin-left: 0;
+	transition: all 0.5s;
+	transition-timing-function: ease-out;
+    padding: 2vh 0;
+    border: solid 1px white;
+    pointer-events: visible;
+}
+
+.panel.left{
+    border-radius: 0 10px 10px 0;
+    border-left: none;
+}
+
+.panel.right{
+    border-radius: 10px 0 0 10px;
+    border-right: none;
+}
+
+.panel.left.hidden{
+	left: -100%;
+}
+
+.panel.right.hidden{
+	margin-left: 100%;
+	right: 0;
+}
+
+/*------------------------------*/
+
+.property{
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.property-check{
+    display: flex;
+    align-items: center;
+}
+
+.property > label{
+    font-family: arial, verdana;
+    font-size: 16px;
+    color: #dddddd;
+    margin-left: 10px;
+    width:165px;
+}
+
+.property-slider > label{
+    font-size: 20px;
+}
+
+/*--------------------------------*/
+
+.toggle-property {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    width: 60px;
+    height: 20px;
+    border-radius: 7px;
+    background-color: #222222;
+    outline: 0;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    float:right;
+    margin-right:10px;
+}
+
+.toggle-property:checked {
+	background-color: #00c26b;
+}
+
+.toggle-property::after {
+    content: '';
+    display:block;
+    width: 32px;
+    height: 22px;
+    background-color: white;
+    border-radius: 7px;
+    position: absolute;
+    margin-top: -1px;
+	transition: all 0.2s ease-in-out;
+	left: 0;
+}
+
+.toggle-property:checked::after {
+    left: 28px;
+}
+
+.toggle-property:disabled::after {
+    background-color: #222222;
+    border: 1px solid #666666;
+    width: 32px;
+    height: 22px;
+}
+
+/*--------------------------------*/
+
+.slider-property {
+    height: 24px;
+    -webkit-appearance: none;
+    margin-left: 10px;
+    width: 230px;
+    background: transparent;
+}
+
+.slider-property:focus {
+    outline: none;
+}
+
+.slider-property::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: #222222;
+    border-radius: 7px;
+    border: 0px solid #000000;
+}
+
+.slider-property::-webkit-slider-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 0px solid #645C66;
+    height: 16px;
+    width: 40px;
+    border-radius: 7px;
+    background: #FFFFFF;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -3px;
+}
+
+.slider-property:focus::-webkit-slider-runnable-track {
+    background: #222222;
+}
+
+.slider-property::-moz-range-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0px 0px 0px #000000;
+    background: #222222;
+    border-radius: 7px;
+    border: 0px solid #000000;
+}
+
+.slider-property::-moz-range-thumb {
+    box-shadow: 0px 0px 0px #000000;
+    border: 0px solid #645C66;
+    height: 16px;
+    width: 40px;
+    border-radius: 7px;
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+.slider-property::-ms-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+}
+
+.slider-property::-ms-fill-lower {
+    background: #222222;
+    border: 0px solid #000000;
+    border-radius: 14px;
+    box-shadow: 0px 0px 0px #000000;
+}
+
+.slider-property::-ms-fill-upper {
+    background: #222222;
+    border: 0px solid #000000;
+    border-radius: 14px;
+    box-shadow: 0px 0px 0px #000000;
+}
+
+.slider-property::-ms-thumb {
+    margin-top: 1px;
+    box-shadow: 0px 0px 0px #000000;
+    border: 0px solid #645C66;
+    height: 16px;
+    width: 40px;
+    border-radius: 7px;
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+.slider-property:focus::-ms-fill-lower {
+    background: #222222;
+}
+
+.slider-property:focus::-ms-fill-upper {
+    background: #222222;
+}
+
+/*--------------------------------*/
+
+#modes{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.mode-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    
+    background-color: tomato;
+    outline: none;
+}
+
+.mode-input:checked {
+    border-color: #ffffff;
+    border-width: 3px;
+    border-style: solid;
+}
+
+/*--------------------------------*/
+
+#savebtn{
+    position: relative;
+    border-radius:50%;
+	display:block;
+	cursor:pointer;
+	border:solid 2px #ffffffaa;
+    width: 90px;
+    height: 90px;
+    margin-left: auto;
+    margin-right: auto;
+    outline: none;
+    cursor: pointer;
+}
+
+#savebtn:hover {
+    border-color: #ffffff;
+    border-width: 4px;
+    border-style: solid;
+}
