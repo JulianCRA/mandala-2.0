@@ -17,6 +17,12 @@ import deleteBtn from '../../../assets/images/deletebtn.png'
 
 let cx = classNames.bind(styles)
 
+const preventPropagation = event => {
+	event.preventDefault()
+	event.stopPropagation()
+	return false
+}
+
 const Controls = ({ side }) => {
 	
 	const { settings, updateSettings } = React.useContext( mandalaContext )
@@ -26,8 +32,10 @@ const Controls = ({ side }) => {
 	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>true)
 
 	return (
-		<div className = { cx(styles.controls, styles[side]) }>
-			<div className = { cx(styles.quickaccess, styles[side]) }>
+		<div className = { cx(styles.controls, styles[side]) } >
+			<div className = { cx(styles.quickaccess, styles[side]) } 
+				onClick = { preventPropagation } 
+				onMouseDown = { preventPropagation } >
 				<button 
 					className = {styles.toolsButton}
 					onClick = { () => {
@@ -83,7 +91,9 @@ const Controls = ({ side }) => {
 					}}
 				/>
 			</div>
-			<div className = { styles.panels }>
+			<div className = { styles.panels }
+				onClick = { preventPropagation } 
+				onMouseDown = { preventPropagation } >
 				<SavePanel side = {side} show = {showSavePanel}/>
 				<ConfigPanel side = {side} show = {showConfigPanel}/>
 				<DrawPanel side = {side} show = {showDrawPanel}/>

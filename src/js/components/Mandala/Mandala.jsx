@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MandalaProvider } from '../../context/MandalaProvider'
-// import MandalaDrawing from './MandalaDrawing'
+import DrawingCanvas from '../DrawingCanvas'
 
 import Controls from '../../ui/Controls'
 
@@ -11,7 +11,7 @@ const Mandala = () => {
 	return (
 		<MandalaProvider>
 			<div className = {styles.mandalaContainer}>
-				{/* <MandalaDrawing /> */}
+				<DrawingCanvas />
 				<Controls side = "left" />
 			</div>
 		</MandalaProvider>
