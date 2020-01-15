@@ -35,11 +35,28 @@ module.exports = {
 				]
 			},
 			{
-				test: /\.css$/,
-				use: [
+				test : /\.module\.css$/,
+				use : [
 					"style-loader",
-					"css-loader"
+					{
+						loader: "css-loader",
+						options: {
+							importLoaders: 1,
+							modules:{
+								localIdentName: '[name]_[local]_[hash:base64:5]',
+							},
+							localsConvention: 'camelCaseOnly'
+						}	
+					}
 				]
+			},
+			{
+				test : /\.css$/,
+				use : [
+					"style-loader",
+					"css-loader",
+				],
+				exclude: /\.module\.css$/,
 			},
 			{
 				test: /\.(png|svg|jpg|gif)$/,
