@@ -8,7 +8,7 @@ import { mandalaContext, actions } from '../../context/MandalaProvider'
 import './spectrum.css'
 
 const previewColor = () => {
-	$(".csampler").css("background-color", $("#colorpicker").spectrum("get").toHexString());
+	$(".csampler").css("background-color", $("#colorpicker").spectrum("get").toHexString())
 }
 
 const ColorPicker = () => {

@@ -9,11 +9,11 @@ import ConfigPanel from '../ConfigPanel'
 
 import styles from './Controls.module.css'
 
-import toolBtn from '../../assets/images/toolsbtn.png'
-import closeBtn from '../../assets/images/closebtn.png'
-import saveBtn from '../../assets/images/savebtn.png'
-import undoBtn from '../../assets/images/undobtn.png'
-import deleteBtn from '../../assets/images/deletebtn.png'
+import toolBtn from '../../../assets/images/toolsbtn.png'
+import closeBtn from '../../../assets/images/closebtn.png'
+import saveBtn from '../../../assets/images/savebtn.png'
+import undoBtn from '../../../assets/images/undobtn.png'
+import deleteBtn from '../../../assets/images/deletebtn.png'
 
 let cx = classNames.bind(styles)
 

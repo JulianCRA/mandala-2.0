@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+
+import Mandala from './components/Mandala'
 
 export class App extends Component {
 
 	render() {
 		return (
-			<React.Fragment>
-				Welcome back, {this.props.name}
-			</React.Fragment>
+			<Mandala side = "left" />
 		)
 	}
 }

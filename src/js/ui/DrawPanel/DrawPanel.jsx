@@ -6,9 +6,9 @@ import ColorPicker from '../ColorPicker'
 
 import styles from '../Controls/Controls.module.css'
 
-import bucketButton from '../../assets/images/bucketbtn.png'
-import freehandButton from '../../assets/images/freehandbtn.png'
-import lineButton from '../../assets/images/straightlinebtn.png'
+import bucketButton from '../../../assets/images/bucketbtn.png'
+import freehandButton from '../../../assets/images/freehandbtn.png'
+import lineButton from '../../../assets/images/straightlinebtn.png'
 
 
 const DrawPanel = ({ side, show }) => {

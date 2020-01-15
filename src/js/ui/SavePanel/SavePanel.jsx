@@ -5,7 +5,7 @@ import { mandalaContext, actions } from '../../context/MandalaProvider'
 
 import styles from '../Controls/Controls.module.css'
 
-import downloadBtn from '../../assets/images/downloadbtn.png'
+import downloadBtn from '../../../assets/images/downloadbtn.png'
 
 const SavePanel = ({ side, show }) => {
 	const { settings, updateSettings } = React.useContext( mandalaContext )
