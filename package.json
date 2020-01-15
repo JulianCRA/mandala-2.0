@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JulianCRA/lets-start-again.git"
+    "url": "git+https://github.com/JulianCRA/madala-2.0.git"
   },
   "keywords": [
     "new",
@@ -19,9 +19,9 @@
   "author": "Julian R.",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JulianCRA/lets-start-again/issues"
+    "url": "https://github.com/JulianCRA/madala-2.0/issues"
   },
-  "homepage": "https://github.com/JulianCRA/lets-start-again#readme",
+  "homepage": "https://github.com/JulianCRA/madala-2.0#readme",
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/plugin-proposal-class-properties": "^7.7.0",
