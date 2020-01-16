@@ -10,6 +10,7 @@
     position: absolute;
     z-index: 10;
     bottom: 0;
+    pointer-events: none;
 }
 
 .controls.left{
@@ -32,6 +33,7 @@
     margin-bottom: 1vh;
     border: solid 1px white;
     z-index: 3;
+    pointer-events: all;
 }
 
 .quickaccess.left{

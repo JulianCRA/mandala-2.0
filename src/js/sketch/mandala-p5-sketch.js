@@ -29,6 +29,7 @@ const mandalaSketch = p => {
 	
 	let mdt
 
+	let canvas
 	let guides
 	let feedback
 	let current
@@ -38,9 +39,13 @@ const mandalaSketch = p => {
 
 	p.preload = () => {}
 	p.setup = () => {
-		p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
-		p.mousePressed = p.pressed
-		p.mouseReleased = p.released
+		canvas = p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
+		canvas.mousePressed(p.pressed)
+		//p.mouseReleased = p.released
+
+		// p.touchStarted = p.tStarted
+		// p.touchEnded = p.tEnded
+		//p.touchMoved = p.tMoved
 
 		mdt = new MandalaDrawingTool({width: p.width, height: p.height, sections: 32})
 
@@ -63,9 +68,20 @@ const mandalaSketch = p => {
 	p.pressed = () => {
 		if(mode !== modes._FILL){
 			p.mouseDragged = p.dragged
+			p.mouseReleased = p.released
 			initial = {x:p.mouseX, y:p.mouseY}
 			mdt.beginCurve(p.mouseX, p.mouseY)
 		}
+	}
+
+	p.tStarted = () => {
+		console.log('TOUCH')
+		if(mode !== modes._FILL){
+			p.touchMoved = p.tMoved
+			initial = {x:p.mouseX, y:p.mouseY}
+			mdt.beginCurve(p.mouseX, p.mouseY)
+		}
+		//return false
 	}
 
 	p.dragged = () => {
@@ -75,12 +91,31 @@ const mandalaSketch = p => {
 		p.image(feedback, 0, 0)
 	}
 
+	p.tMoved = () => {
+		mdt.addVertex(p.mouseX, p.mouseY)
+		mdt.drawLine(feedback, mode)
+		mode === modes._STRAIGHT ? p.update() : null
+		p.image(feedback, 0, 0)
+		//return false
+	}
+
 	p.released = () => {
-		console.log("RELEAS")
-		p.mouseDragged = null
-		current.image(feedback, 0, 0)
-		mdt.endCurve(p.mouseX, p.mouseY)
+		if(mode !== modes._FILL){
+			p.mouseDragged = null
+			current.image(feedback, 0, 0)
+			mdt.endCurve(p.mouseX, p.mouseY)
+		}
 		p.update()
+	}
+
+	p.tEnded = () => {
+		if(mode !== modes._FILL){
+			//p.tMoved = null
+			current.image(feedback, 0, 0)
+			mdt.endCurve(p.mouseX, p.mouseY)
+		}
+		p.update()
+		// return false
 	}
 
 	p.customRedraw = config => {

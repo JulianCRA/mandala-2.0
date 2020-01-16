@@ -33,10 +33,7 @@ const Controls = ({ side }) => {
 
 	return (
 		<div className = { cx(styles.controls, styles[side]) } >
-			<div className = { cx(styles.quickaccess, styles[side]) } 
-				onClick = { preventPropagation } 
-				onMouseDown = { preventPropagation } 
-				onMouseUp = { preventPropagation } >
+			<div className = { cx(styles.quickaccess, styles[side]) } >
 				<button 
 					className = {styles.toolsButton}
 					onClick = { () => {
@@ -92,12 +89,7 @@ const Controls = ({ side }) => {
 					}}
 				/>
 			</div>
-			<div className = { styles.panels }
-				onClick = { preventPropagation } 
-				onMouseDown = { preventPropagation } 
-				onMouseUp = { preventPropagation } 
-				>
-				
+			<div className = { styles.panels } >
 				<SavePanel side = {side} show = {showSavePanel}/>
 				<ConfigPanel side = {side} show = {showConfigPanel}/>
 				<DrawPanel side = {side} show = {showDrawPanel}/>
