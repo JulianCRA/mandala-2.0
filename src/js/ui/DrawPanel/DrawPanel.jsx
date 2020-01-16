@@ -1,7 +1,7 @@
 import React from 'react'
 import cx from 'classnames'
 
-import { mandalaContext, actions } from '../../context/MandalaProvider'
+import { mandalaContext, actions, modes } from '../../context/MandalaProvider'
 import ColorPicker from '../ColorPicker'
 
 import styles from '../Controls/Controls.module.css'
@@ -13,11 +13,11 @@ import lineButton from '../../../assets/images/straightlinebtn.png'
 
 const DrawPanel = ({ side, show }) => {
 	const { settings, updateSettings } = React.useContext( mandalaContext )
-
+	
 	const setMode = mode => {
+		console.log('settings :', settings.mode);
 		updateSettings({
-			type: actions._CHANGE_VALUE,
-			attribute: 'mode',
+			type: actions._SET_MODE,
 			value: mode
 		})
 	}
@@ -25,14 +25,14 @@ const DrawPanel = ({ side, show }) => {
 	return (
 		<div className = {cx(styles.panel, styles[side], { [styles.hidden]: !show })}>
 			<ColorPicker />
-			<div id = {styles.modes}>
+			<div id = {styles.modes} onChange={huh=>console.log('huh :', huh.target)}>
 				<input 
 					type = "radio" 
 					className = { cx(styles.toolsButton, styles.modeInput)} 
 					name = "moderb"
 					style = {{background: `url(${freehandButton}) center no-repeat`}}
-					onClick = { () => setMode('FREEHAND')}
-					defaultChecked
+					onChange = { () => setMode(modes._FREE_HAND) }
+					checked = {settings.mode === modes._FREE_HAND}
 				/>
 
 				<input 
@@ -40,7 +40,8 @@ const DrawPanel = ({ side, show }) => {
 					className = { cx(styles.toolsButton, styles.modeInput)} 
 					name = "moderb"
 					style = {{background: `url(${lineButton}) center no-repeat`}}
-					onClick = { () => setMode('STRAIGHT')}
+					onChange = { () => setMode(modes._STRAIGHT) }
+					checked = {settings.mode === modes._STRAIGHT}
 				/>
 
 				<input 
@@ -48,7 +49,8 @@ const DrawPanel = ({ side, show }) => {
 					className = { cx(styles.toolsButton, styles.modeInput)} 
 					name = "moderb"
 					style = {{background: `url(${bucketButton}) center no-repeat`}}
-					onClick = { () => setMode('FILL')}
+					onChange = { () => setMode(modes._FILL) }
+					checked = {settings.mode === modes._FILL}
 				/>
 			</div>
 		</div>

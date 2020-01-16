@@ -16,8 +16,7 @@ const ColorPicker = () => {
 
 	const setColor = ({_r, _g, _b, _a}) => {
 		updateSettings({
-			type: actions._CHANGE_VALUE,
-			attribute: 'color',
+			type: actions._CHANGE_COLOR,
 			value: [Math.round(_r), Math.round(_g), Math.round(_b), Math.round(_a*255)]
 		})
 	}

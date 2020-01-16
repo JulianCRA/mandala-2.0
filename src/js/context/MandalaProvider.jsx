@@ -2,12 +2,20 @@ import React, { useReducer } from 'react'
 
 const actions = {
 	_CHANGE_VALUE : 1,
-	_TOGGLE_LINES_ONLY: 2
+	_TOGGLE_LINES_ONLY: 2,
+	_CHANGE_COLOR: 3,
+	_SET_MODE: 4
+}
+
+const modes = {
+	_FREE_HAND: 0,
+	_STRAIGHT: 1,
+	_FILL: 2
 }
 
 const initialSettings = {
 	color: [255, 255, 255, 255],
-	mode: 1, // _FREEHAND
+	mode: modes._FREE_HAND,
 	sections: 32,
 	accuracy: 15,
 	strokeWidth: 3,
@@ -19,7 +27,7 @@ const initialSettings = {
 	blackLines: false,
 	forcedAlias: false,
 
-	action: 'INITIALIZE'
+	state: 'INITIALIZE'
 }
 
 const settingsReducer = (settings, action) => {
@@ -38,12 +46,22 @@ const settingsReducer = (settings, action) => {
 				blackLines: false,
 				forcedAlias: false
 			}
-		case 3:
-			return {
-				...settings,
-				action: 'EXE',
-				method: action.method
-			}
+		case actions._CHANGE_COLOR:
+			return settings.color === action.value ?
+				settings :
+				{
+					...settings,
+					color: action.value,
+					state: "CHANGE_COLOR"
+				}
+		case actions._SET_MODE:
+			return settings.mode === action.value ?
+				settings :
+				{
+					...settings,
+					mode: action.value,
+					state: "SET_MODE"
+				}
 		default:
 			return settings
 
@@ -75,4 +93,4 @@ const MandalaProvider = ({ children }) => {
 	)
 }
 
-export { MandalaProvider, mandalaContext, actions }
+export { MandalaProvider, mandalaContext, actions, modes }
