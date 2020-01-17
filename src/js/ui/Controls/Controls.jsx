@@ -17,19 +17,13 @@ import deleteBtn from '../../../assets/images/deletebtn.png'
 
 let cx = classNames.bind(styles)
 
-const preventPropagation = event => {
-	//event.preventDefault()
-	event.stopPropagation()
-	return false
-}
-
 const Controls = ({ side }) => {
 	
 	const { settings, updateSettings } = React.useContext( mandalaContext )
 	
-	const [ showConfigPanel, toggleConfigPanel ] = React.useState(()=>false)
+	const [ showConfigPanel, toggleConfigPanel ] = React.useState(()=>true)
 	const [ showSavePanel, toggleSavePanel ] = React.useState(()=>false)
-	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>true)
+	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>false)
 
 	return (
 		<div className = { cx(styles.controls, styles[side]) } >

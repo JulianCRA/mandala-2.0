@@ -10,7 +10,13 @@ class MandalaDrawingTool {
         this.color = [255, 255, 255, 255]
 
         this.reflect = true
-	}
+    }
+    
+    setSections(s){
+        this.sections = s
+        this.angleIncrement = Math.PI * 2 / s
+        console.log('DAFUQ')
+    }
 
     addVertex(xCoord, yCoord){
         this.points.push({x: xCoord - this.horizontalOffset, y:yCoord - this.verticalOffset})
@@ -38,15 +44,18 @@ class MandalaDrawingTool {
         for(let s = 0; s < this.sections; s++){
             container.push()
             container.rotate(s * this.angleIncrement)
+            container.stroke(this.color)
             if(this.reflect && s%2 != 0){
                 container.rotate(this.angleIncrement)
-                container.scale(1.0, -1.0)
+                container.scale(1, -1)
             }
-            container.line(this.points[initial].x, this.points[initial].y, this.points[final].x, this.points[final].y);
-            container.pop();
+            container.line(this.points[initial].x, this.points[initial].y, this.points[final].x, this.points[final].y)
+            container.pop()
         }
         container.pop()
     }
+
+    
 }
 
 export default MandalaDrawingTool

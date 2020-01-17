@@ -1,13 +1,16 @@
 import MandalaDrawingTool from './MandalaDrawingTool'
 
-const drawGuides = ({container, sections = 32, width = 640, height = 480}) => {
+const drawGuides = ({container, sections = 16, width = 640, height = 480}) => {
 	const horizontalOffset = width * 0.5
 	const verticalOffset = height * 0.5
 
 	container.stroke([170, 170, 170, 50])
-	container.translate(horizontalOffset, verticalOffset)
 	container.noFill()
 	container.strokeWeight(2)
+	container.clear()
+
+	container.push()
+	container.translate(horizontalOffset, verticalOffset)
 
 	for(let s = 0; s < sections; s++){
 		container.rotate(Math.PI * 2 / sections)
@@ -17,6 +20,7 @@ const drawGuides = ({container, sections = 32, width = 640, height = 480}) => {
 	const constraint = Math.min(width, height)
 	container.rect(constraint * -0.5, constraint * -0.5, constraint, constraint)
 	container.ellipse(0, 0, constraint, constraint)
+	container.pop()
 }
 
 const modes = {
@@ -34,20 +38,18 @@ const mandalaSketch = p => {
 	let feedback
 	let current
 
-	let initial
 	let mode = modes._FREE_HAND
 
 	p.preload = () => {}
 	p.setup = () => {
 		canvas = p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
 		canvas.mousePressed(p.pressed)
-		//p.mouseReleased = p.released
 
-		// p.touchStarted = p.tStarted
-		// p.touchEnded = p.tEnded
-		//p.touchMoved = p.tMoved
+		canvas.touchStarted(p.tStarted)
+		canvas.touchEnded(p.tEnded)
+		canvas.touchMoved(p.tMoved)
 
-		mdt = new MandalaDrawingTool({width: p.width, height: p.height, sections: 32})
+		mdt = new MandalaDrawingTool({width: p.width, height: p.height, sections: 16})
 
 		current = p.createGraphics(p.width, p.height)
 		feedback = p.createGraphics(p.width, p.height)
@@ -65,23 +67,15 @@ const mandalaSketch = p => {
 		p.image(guides, 0, 0)
 	}
 
+	/** MOUSE EVENTS */
+
 	p.pressed = () => {
 		if(mode !== modes._FILL){
 			p.mouseDragged = p.dragged
 			p.mouseReleased = p.released
-			initial = {x:p.mouseX, y:p.mouseY}
+			console.log("MOUSE PRESED")
 			mdt.beginCurve(p.mouseX, p.mouseY)
 		}
-	}
-
-	p.tStarted = () => {
-		console.log('TOUCH')
-		if(mode !== modes._FILL){
-			p.touchMoved = p.tMoved
-			initial = {x:p.mouseX, y:p.mouseY}
-			mdt.beginCurve(p.mouseX, p.mouseY)
-		}
-		//return false
 	}
 
 	p.dragged = () => {
@@ -91,31 +85,49 @@ const mandalaSketch = p => {
 		p.image(feedback, 0, 0)
 	}
 
-	p.tMoved = () => {
-		mdt.addVertex(p.mouseX, p.mouseY)
-		mdt.drawLine(feedback, mode)
-		mode === modes._STRAIGHT ? p.update() : null
-		p.image(feedback, 0, 0)
-		//return false
-	}
-
 	p.released = () => {
 		if(mode !== modes._FILL){
 			p.mouseDragged = null
-			current.image(feedback, 0, 0)
 			mdt.endCurve(p.mouseX, p.mouseY)
+			current.image(feedback, 0, 0)
 		}
 		p.update()
+	}
+
+	/** TOUCH EVENTS */
+	let activeTouch = false
+	p.tStarted = (event) => {
+		console.log('TOUCH start')
+		//console.log('huh', huh)
+		if(mode !== modes._FILL){
+			const touch = event.touches[0]
+			// const x = touch.pageX
+			// const y = touch.pageY
+			activeTouch = true
+			mdt.beginCurve(touch.pageX, touch.pageY)
+		}
+		return false
+	}
+	
+	p.tMoved = () => {
+		//if(activeTouch || true){
+			mdt.addVertex(p.mouseX, p.mouseY)
+			mdt.drawLine(feedback, mode)
+			mode === modes._STRAIGHT ? p.update() : null
+			p.image(feedback, 0, 0)
+		//}
+		return false
 	}
 
 	p.tEnded = () => {
 		if(mode !== modes._FILL){
-			//p.tMoved = null
-			current.image(feedback, 0, 0)
+			console.log('TOUCH END')
+			if(activeTouch) activeTouch = false
 			mdt.endCurve(p.mouseX, p.mouseY)
+			current.image(feedback, 0, 0)	
 		}
 		p.update()
-		// return false
+		return false
 	}
 
 	p.customRedraw = config => {
@@ -125,6 +137,12 @@ const mandalaSketch = p => {
 			break
 			case "SET_MODE":
 				mode = config.mode
+			break
+			case "SET_SECTIONS":
+				console.log(config.sections)
+				mdt.setSections(config.sections)
+				drawGuides({container: guides, width: p.width, height: p.height, sections: config.sections})
+				p.update()
 			break
 		}
 	}

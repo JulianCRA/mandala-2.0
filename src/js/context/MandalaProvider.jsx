@@ -4,7 +4,8 @@ const actions = {
 	_CHANGE_VALUE : 1,
 	_TOGGLE_LINES_ONLY: 2,
 	_CHANGE_COLOR: 3,
-	_SET_MODE: 4
+	_SET_MODE: 4,
+	_SET_SECTIONS: 5
 }
 
 const modes = {
@@ -61,6 +62,14 @@ const settingsReducer = (settings, action) => {
 					...settings,
 					mode: action.value,
 					state: "SET_MODE"
+				}
+		case actions._SET_SECTIONS:
+			return settings.sections === action.value ?
+				settings :
+				{
+					...settings,
+					sections: action.value,
+					state: "SET_SECTIONS"
 				}
 		default:
 			return settings

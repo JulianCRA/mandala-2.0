@@ -7,7 +7,10 @@ import styles from '../Controls/Controls.module.css'
 
 const ConfigPanel = ({ side, show }) => {
 	const { settings, updateSettings } = React.useContext( mandalaContext )
-	
+
+	const [sections, setSections] = React.useState(settings.sections)
+	const [sectionsFlag, setSectionsFlag] = React.useState(false)
+	console.log("GUATAFO");
 	return (
 		<div className = {cx(styles.panel, styles[side], { [styles.hidden]: !show })}>
 			
@@ -16,14 +19,13 @@ const ConfigPanel = ({ side, show }) => {
 				<input 
 					type = "range" 
 					className = {styles.sliderProperty}
-					defaultValue = {settings.sections} 
+					value = {settings.sections} 
 					min = "2"
 					max = "128" 
 					step = "2" 
-					onInput = {event => 
+					onChange = {event => 
 						updateSettings({
-							type: actions._CHANGE_VALUE, 
-							attribute: 'sections',
+							type: actions._SET_SECTIONS,
 							value: Number(event.currentTarget.value)
 						})
 					}
