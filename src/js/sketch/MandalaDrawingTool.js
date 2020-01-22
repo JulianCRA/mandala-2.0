@@ -19,8 +19,108 @@ class MandalaDrawingTool {
         this.angleIncrement = Math.PI * 2 / s
     }
 
-    fillArea(){
-        console.log("FILL AREA")
+    fillArea({xpos, ypos, currentDrawing, placeHolder, newColor = this.color}){
+        const initialColor = currentDrawing.get(xpos, ypos)
+
+        function matchWithInitial(color){
+            return(
+                initialColor[0] === color[0] && 
+                initialColor[1] === color[1] && 
+                initialColor[2] === color[2] && 
+                initialColor[3] === color[3]
+            )
+        }
+        
+        if(matchWithInitial(newColor)) return false 
+
+        let pixStack = [{x:xpos, y:ypos}]
+        let leftSideHasBeenChecked
+        let rightSideHasBeenChecked
+
+        placeHolder.clear()
+        currentDrawing.loadPixels()
+        placeHolder.loadPixels()
+
+        while(pixStack.length > 0){
+            let pixel = pixStack.pop()
+            leftSideHasBeenChecked = false
+            rightSideHasBeenChecked = false
+            
+            while(pixel.y >= 0){
+                pixel.y--
+                const pixelPosition = (pixel.y * placeHolder.width + pixel.x) * 4
+                if(!matchWithInitial([
+                    currentDrawing.pixels[pixelPosition], 
+                    currentDrawing.pixels[pixelPosition + 1], 
+                    currentDrawing.pixels[pixelPosition + 2], 
+                    currentDrawing.pixels[pixelPosition + 3]
+                ])) break
+            }
+
+            while(pixel.y < placeHolder.height - 1){
+                pixel.y++;
+                const pixelPosition = (pixel.y * placeHolder.width + pixel.x) * 4
+                if(!matchWithInitial([
+                    currentDrawing.pixels[pixelPosition], 
+                    currentDrawing.pixels[pixelPosition + 1], 
+                    currentDrawing.pixels[pixelPosition + 2], 
+                    currentDrawing.pixels[pixelPosition + 3]
+                ])) break
+
+                placeHolder.pixels[pixelPosition] = this.color[0]
+                placeHolder.pixels[pixelPosition+1] = this.color[1]
+                placeHolder.pixels[pixelPosition+2] = this.color[2]
+                placeHolder.pixels[pixelPosition+3] = this.color[3]
+
+                currentDrawing.pixels[pixelPosition] = this.color[0]
+                currentDrawing.pixels[pixelPosition+1] = this.color[1]
+                currentDrawing.pixels[pixelPosition+2] = this.color[2]
+                currentDrawing.pixels[pixelPosition+3] = this.color[3]
+
+                if(pixel.x > 0){
+                    let pixelPosition = (pixel.y * placeHolder.width + (pixel.x - 1)) * 4
+                    if(matchWithInitial([
+                        currentDrawing.pixels[pixelPosition], 
+                        currentDrawing.pixels[pixelPosition + 1], 
+                        currentDrawing.pixels[pixelPosition + 2], 
+                        currentDrawing.pixels[pixelPosition + 3]
+                        ])
+                    ){
+                        if(!leftSideHasBeenChecked){
+                            pixStack.push({x:(pixel.x - 1), y:pixel.y})
+                            leftSideHasBeenChecked = true
+                        }
+                    }
+                    else{
+                        if(leftSideHasBeenChecked) leftSideHasBeenChecked = false
+                    }
+                }
+
+                if(pixel.x < placeHolder.width - 1){
+                    let pixelPosition = (pixel.y * placeHolder.width + (pixel.x + 1)) * 4
+                    if(matchWithInitial([
+                        currentDrawing.pixels[pixelPosition], 
+                        currentDrawing.pixels[pixelPosition + 1], 
+                        currentDrawing.pixels[pixelPosition + 2], 
+                        currentDrawing.pixels[pixelPosition + 3]
+                        ])
+                    ){
+                        if(!rightSideHasBeenChecked){
+                            pixStack.push({x:(pixel.x + 1), y:pixel.y})
+                            rightSideHasBeenChecked = true
+                        }
+                    }
+                    else{
+                        if(rightSideHasBeenChecked) rightSideHasBeenChecked = false
+                    }
+                }
+            }
+        }
+
+        
+        placeHolder.updatePixels()
+        currentDrawing.updatePixels()
+        //currentDrawing.image(placeHolder, 0, 0)
     }
 
     addVertex(xCoord, yCoord){

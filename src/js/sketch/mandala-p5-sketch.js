@@ -46,6 +46,8 @@ const mandalaSketch = p => {
 	let reflect
 	let showGuides
 	let antialias
+
+	let isDrawing
 	
 	function initialize(config){
 		color = config.color
@@ -91,6 +93,7 @@ const mandalaSketch = p => {
 
 	p.pressed = () => {
 		p.mouseReleased = p.released
+		isDrawing = true
 		if(mode !== modes._FILL){
 			p.mouseDragged = p.dragged
 			
@@ -114,8 +117,10 @@ const mandalaSketch = p => {
 			mdt.applyLineCorrection(feedback, mode)
 			current.image(feedback, 0, 0)
 		}else{
-			mdt.fillArea()
+			if(isDrawing)
+				mdt.fillArea({xpos:p.mouseX, ypos:p.mouseY, currentDrawing:current, placeHolder:feedback})
 		}
+		isDrawing = false
 		p.update()
 	}
 	//#endregion

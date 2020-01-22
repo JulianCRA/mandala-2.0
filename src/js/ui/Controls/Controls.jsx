@@ -21,9 +21,9 @@ const Controls = ({ side }) => {
 	
 	const { settings, updateSettings } = React.useContext( mandalaContext )
 	
-	const [ showConfigPanel, toggleConfigPanel ] = React.useState(()=>true)
+	const [ showConfigPanel, toggleConfigPanel ] = React.useState(()=>false)
 	const [ showSavePanel, toggleSavePanel ] = React.useState(()=>false)
-	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>false)
+	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>true)
 
 	return (
 		<div className = { cx(styles.controls, styles[side]) } >

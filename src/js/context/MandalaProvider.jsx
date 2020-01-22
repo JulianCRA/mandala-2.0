@@ -17,10 +17,10 @@ const modes = {
 const initialSettings = {
 	color: [255, 255, 255, 255],
 	mode: modes._FREE_HAND,
-	sections: 2,
+	sections: 8,
 	correctionAccuracy: 0.15,
 	strokeWidth: 5,
-	reflect: false,
+	reflect: true,
 	showGuides: true,
 	antialias: true,
 
