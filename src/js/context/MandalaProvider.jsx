@@ -28,7 +28,8 @@ const initialSettings = {
 	blackLines: false,
 	forcedAlias: false,
 
-	state: 'INITIALIZE'
+	state: 'INITIALIZE',
+	attribute: null
 }
 
 const settingsReducer = (settings, action) => {
@@ -38,6 +39,8 @@ const settingsReducer = (settings, action) => {
 				settings :
 				{
 					...settings,
+					attribute: action.attribute,
+					state: "UPDATE_VALUE",
 					[action.attribute]: action.value
 				}
 		case actions._TOGGLE_LINES_ONLY:

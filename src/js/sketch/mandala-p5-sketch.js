@@ -45,9 +45,9 @@ const mandalaSketch = p => {
 		canvas = p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
 		canvas.mousePressed(p.pressed)
 
-		canvas.touchStarted(p.tStarted)
-		canvas.touchEnded(p.tEnded)
-		canvas.touchMoved(p.tMoved)
+		// canvas.touchStarted(p.tStarted)
+		// canvas.touchEnded(p.tEnded)
+		// canvas.touchMoved(p.tMoved)
 
 		mdt = new MandalaDrawingTool({width: p.width, height: p.height, sections: 16})
 
@@ -73,7 +73,6 @@ const mandalaSketch = p => {
 		if(mode !== modes._FILL){
 			p.mouseDragged = p.dragged
 			p.mouseReleased = p.released
-			console.log("MOUSE PRESED")
 			mdt.beginCurve(p.mouseX, p.mouseY)
 		}
 	}
@@ -88,13 +87,16 @@ const mandalaSketch = p => {
 	p.released = () => {
 		if(mode !== modes._FILL){
 			p.mouseDragged = null
+			p.mouseReleased = null
 			mdt.endCurve(p.mouseX, p.mouseY)
+			mdt.applyLineCorrection(feedback)
 			current.image(feedback, 0, 0)
 		}
 		p.update()
 	}
 
 	/** TOUCH EVENTS */
+	/*
 	let activeTouch = false
 	p.tStarted = (event) => {
 		console.log('TOUCH start')
@@ -129,8 +131,9 @@ const mandalaSketch = p => {
 		p.update()
 		return false
 	}
-
+*/
 	p.customRedraw = config => {
+		console.log(config. state, config.attribute, config[config.attribute])
 		switch(config.state){
 			case "CHANGE_COLOR":
 				mdt.color = config.color
@@ -143,6 +146,19 @@ const mandalaSketch = p => {
 				mdt.setSections(config.sections)
 				drawGuides({container: guides, width: p.width, height: p.height, sections: config.sections})
 				p.update()
+			break
+			case "UPDATE_VALUE":
+				switch(config.attribute){
+					case "strokeWidth":
+						mdt.strokeSize = config.strokeWidth
+					break
+					case "reflect":
+						mdt.reflect = config.reflect
+					break
+					case "accuracy":
+						mdt.sampleSize = config.accuracy / 100
+					break
+				}
 			break
 		}
 	}

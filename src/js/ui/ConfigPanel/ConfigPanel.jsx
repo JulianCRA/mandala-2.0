@@ -7,10 +7,7 @@ import styles from '../Controls/Controls.module.css'
 
 const ConfigPanel = ({ side, show }) => {
 	const { settings, updateSettings } = React.useContext( mandalaContext )
-
-	const [sections, setSections] = React.useState(settings.sections)
-	const [sectionsFlag, setSectionsFlag] = React.useState(false)
-	console.log("GUATAFO");
+	
 	return (
 		<div className = {cx(styles.panel, styles[side], { [styles.hidden]: !show })}>
 			
