@@ -38,25 +38,43 @@ const mandalaSketch = p => {
 	let feedback
 	let current
 
-	let mode = modes._FREE_HAND
+	let color
+	let mode
+	let sections
+	let correctionAccuracy
+	let strokeWidth
+	let reflect
+	let showGuides
+	let antialias
+	
+	function initialize(config){
+		color = config.color
+		mode = config.mode
+		sections = config.sections
+		correctionAccuracy = config.correctionAccuracy
+		strokeWidth = config.strokeWidth
+		reflect  = config.reflect
+		showGuides = config.showGuides
+		antialias =  config.antialias
+	}
 
 	p.preload = () => {}
 	p.setup = () => {
+		console.log("SETUP")
 		canvas = p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
 		canvas.mousePressed(p.pressed)
-
+		
 		// canvas.touchStarted(p.tStarted)
 		// canvas.touchEnded(p.tEnded)
 		// canvas.touchMoved(p.tMoved)
 
-		mdt = new MandalaDrawingTool({width: p.width, height: p.height, sections: 16})
+		mdt = new MandalaDrawingTool({width: p.width, height: p.height, color, sections, reflect, antialias, strokeWidth, correctionAccuracy})
 
 		current = p.createGraphics(p.width, p.height)
 		feedback = p.createGraphics(p.width, p.height)
-		feedback.stroke(155)
 
 		guides = p.createGraphics(p.width, p.height)
-		drawGuides({container: guides, width: p.width, height: p.height})
+		drawGuides({container: guides, width: p.width, height: p.height, sections:sections})
 
 		p.update()
 	}
@@ -64,16 +82,20 @@ const mandalaSketch = p => {
 	p.update = () => {
 		p.clear()
 		p.image(current, 0, 0)
-		p.image(guides, 0, 0)
+		if(showGuides)
+			p.image(guides, 0, 0)
 	}
 
+	//#region MOUSE EVENTS
 	/** MOUSE EVENTS */
 
 	p.pressed = () => {
+		p.mouseReleased = p.released
 		if(mode !== modes._FILL){
 			p.mouseDragged = p.dragged
-			p.mouseReleased = p.released
-			mdt.beginCurve(p.mouseX, p.mouseY)
+			
+			feedback.clear()
+			mdt.beginLine(p.mouseX, p.mouseY)
 		}
 	}
 
@@ -88,13 +110,17 @@ const mandalaSketch = p => {
 		if(mode !== modes._FILL){
 			p.mouseDragged = null
 			p.mouseReleased = null
-			mdt.endCurve(p.mouseX, p.mouseY)
-			mdt.applyLineCorrection(feedback)
+			mdt.endLine(p.mouseX, p.mouseY)
+			mdt.applyLineCorrection(feedback, mode)
 			current.image(feedback, 0, 0)
+		}else{
+			mdt.fillArea()
 		}
 		p.update()
 	}
+	//#endregion
 
+	//#region TOUCH EVENTS
 	/** TOUCH EVENTS */
 	/*
 	let activeTouch = false
@@ -132,31 +158,45 @@ const mandalaSketch = p => {
 		return false
 	}
 */
+	//#endregion
+	
 	p.customRedraw = config => {
+		console.log("CUSTOM")
 		console.log(config. state, config.attribute, config[config.attribute])
 		switch(config.state){
-			case "CHANGE_COLOR":
-				mdt.color = config.color
+			case "INITIALIZE":
+				initialize(config)
 			break
-			case "SET_MODE":
-				mode = config.mode
-			break
-			case "SET_SECTIONS":
-				console.log(config.sections)
-				mdt.setSections(config.sections)
-				drawGuides({container: guides, width: p.width, height: p.height, sections: config.sections})
-				p.update()
-			break
+			
+			
 			case "UPDATE_VALUE":
 				switch(config.attribute){
+					case "mode":
+						mode = config.mode
+					break
+					case "sections":
+						mdt.setSections(config.sections)
+						drawGuides({container: guides, width: p.width, height: p.height, sections: config.sections})
+						p.update()
+					break
+					case "color":
+						mdt.color = config.color
+					break
 					case "strokeWidth":
 						mdt.strokeSize = config.strokeWidth
 					break
 					case "reflect":
 						mdt.reflect = config.reflect
 					break
-					case "accuracy":
-						mdt.sampleSize = config.accuracy / 100
+					case "correctionAccuracy":
+						mdt.sampleSize = config.correctionAccuracy
+					break
+					case "antialias":
+						mdt.antiAlias = config.antialias
+					break
+					case "showGuides":
+						showGuides = config.showGuides
+						p.update()
 					break
 				}
 			break

@@ -17,7 +17,8 @@ const DrawPanel = ({ side, show }) => {
 	const setMode = mode => {
 		console.log('settings :', settings.mode);
 		updateSettings({
-			type: actions._SET_MODE,
+			type: actions._CHANGE_VALUE,
+			attribute: "mode",
 			value: mode
 		})
 	}

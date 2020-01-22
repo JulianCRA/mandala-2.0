@@ -1,6 +1,5 @@
-
 class MandalaDrawingTool {
-	constructor({sections, width, height}){
+	constructor({sections, width, height, color, reflect, antialias, strokeWidth, correctionAccuracy}){
         this.points = []
         this.sections = sections
         this.angleIncrement = Math.PI * 2 / sections
@@ -8,29 +7,32 @@ class MandalaDrawingTool {
         this.verticalOffset = height * 0.5
         this.horizontalOffset = width * 0.5
 
-        this.color = [255, 255, 255, 255]
-
-        this.reflect = true
-        this.strokeSize = 3
-        this.sampleSize = 0.15
+        this.color = color
+        this.reflect = reflect
+        this.antiAlias = antialias
+        this.strokeSize = strokeWidth
+        this.sampleSize = correctionAccuracy
     }
     
     setSections(s){
         this.sections = s
         this.angleIncrement = Math.PI * 2 / s
-        console.log('DAFUQ')
+    }
+
+    fillArea(){
+        console.log("FILL AREA")
     }
 
     addVertex(xCoord, yCoord){
         this.points.push({x: xCoord - this.horizontalOffset, y:yCoord - this.verticalOffset})
     }
 
-	beginCurve = (initialX, initialY) => {
+	beginLine = (initialX, initialY) => {
         this.points = []
         this.addVertex(initialX, initialY)
     }
 
-    endCurve(finalX, finalY){
+    endLine(finalX, finalY){
 		this.addVertex(finalX, finalY)
     }
 
@@ -39,7 +41,7 @@ class MandalaDrawingTool {
         
         container.push()
         container.strokeWeight(this.strokeSize)
-        container.stroke([this.color[0]*0.6, this.color[1]*0.6, this.color[2]*0.6])
+        container.stroke([this.color[0]*0.75, this.color[1]*0.75, this.color[2]*0.75])
         container.translate(container.width/2, container.height/2)
         const final = this.points.length-1
         const initial = mode === 0 ? final-1 : 0
@@ -57,11 +59,15 @@ class MandalaDrawingTool {
         container.pop()
     }
 
-    applyLineCorrection(placeHolder){
+    applyLineCorrection(placeHolder, mode){
+        // console.log('mode', mode)
+        // console.log('this.points.length', this.points.length)
+        // console.log('this.sampleSize', this.sampleSize)
         let totalSamples = Math.ceil((this.sampleSize * this.points.length)-1)
         let samples = [this.points[0]]
-        for(let i = 0; i < totalSamples; i++)
-            samples.push(this.points[Math.floor(i*this.points.length/totalSamples)])
+        if(mode === 0)
+            for(let i = 0; i < totalSamples; i++)
+                samples.push(this.points[Math.floor(i*this.points.length/totalSamples)])
         samples.push(this.points[this.points.length-1])
         
         placeHolder.clear()
@@ -71,9 +77,7 @@ class MandalaDrawingTool {
         placeHolder.strokeJoin("round")
         placeHolder.noFill()
         
-
         const final = samples.length-1
-        
         for(let s = 0; s < this.sections; s++){
             placeHolder.push()
             placeHolder.translate(placeHolder.width/2, placeHolder.height/2)
@@ -95,18 +99,13 @@ class MandalaDrawingTool {
             placeHolder.pop()
         }
 
-        // if(!this.antiAlias){
-        //     placeHolder.loadPixels();
-        //     for (let i = 0; i < placeHolder.pixels.length; i += 4) 
-        //         if(placeHolder.pixels[i+3] != 0){
-        //             placeHolder.pixels[i] = this.currentColor[0];
-        //             placeHolder.pixels[i+1] = this.currentColor[1];
-        //             placeHolder.pixels[i+2] = this.currentColor[2];
-        //             placeHolder.pixels[i+3] = this.currentColor[3];
-        //         }
-                    
-        //     placeHolder.updatePixels();
-        // }
+        if(!this.antiAlias){
+            placeHolder.loadPixels()
+            for (let i = 3; i < placeHolder.pixels.length; i += 4) 
+                if(placeHolder.pixels[i] != 0)
+                    placeHolder.pixels[i] = 255                    
+            placeHolder.updatePixels()
+        }
         
     }
     

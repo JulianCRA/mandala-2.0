@@ -22,7 +22,8 @@ const ConfigPanel = ({ side, show }) => {
 					step = "2" 
 					onChange = {event => 
 						updateSettings({
-							type: actions._SET_SECTIONS,
+							type: actions._CHANGE_VALUE, 
+							attribute: 'sections',
 							value: Number(event.currentTarget.value)
 						})
 					}
@@ -30,19 +31,19 @@ const ConfigPanel = ({ side, show }) => {
 			</div>
 
 			<div className = { cx(styles.property, styles.propertySlider)}>
-				<label> Stroke accuracy : {settings.accuracy}%</label>
+				<label> Stroke accuracy : {Math.round(settings.correctionAccuracy*100)}%</label>
 				<input 
 					type = "range" 
 					className = {styles.sliderProperty}
-					defaultValue = {settings.accuracy} 
+					defaultValue = {Math.round(settings.correctionAccuracy*100)} 
 					min = "5" 
 					max = "50" 
-					step = "1" onInput="sampleSize(this.value)"
+					step = "1"
 					onInput = {event => 
 						updateSettings({
 							type: actions._CHANGE_VALUE, 
-							attribute: 'accuracy',
-							value: Number(event.currentTarget.value)
+							attribute: 'correctionAccuracy',
+							value: Number(event.currentTarget.value / 100)
 						})
 					}
 				/>

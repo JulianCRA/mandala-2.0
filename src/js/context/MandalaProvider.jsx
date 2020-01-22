@@ -17,10 +17,10 @@ const modes = {
 const initialSettings = {
 	color: [255, 255, 255, 255],
 	mode: modes._FREE_HAND,
-	sections: 32,
-	accuracy: 15,
-	strokeWidth: 3,
-	reflect: true,
+	sections: 2,
+	correctionAccuracy: 0.15,
+	strokeWidth: 5,
+	reflect: false,
 	showGuides: true,
 	antialias: true,
 
@@ -57,22 +57,6 @@ const settingsReducer = (settings, action) => {
 					...settings,
 					color: action.value,
 					state: "CHANGE_COLOR"
-				}
-		case actions._SET_MODE:
-			return settings.mode === action.value ?
-				settings :
-				{
-					...settings,
-					mode: action.value,
-					state: "SET_MODE"
-				}
-		case actions._SET_SECTIONS:
-			return settings.sections === action.value ?
-				settings :
-				{
-					...settings,
-					sections: action.value,
-					state: "SET_SECTIONS"
 				}
 		default:
 			return settings
