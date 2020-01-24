@@ -25,7 +25,7 @@ const DrawPanel = ({ side, show }) => {
 	return (
 		<div className = {cx(styles.panel, styles[side], { [styles.hidden]: !show })}>
 			<ColorPicker />
-			<div id = {styles.modes} onChange={huh=>console.log('huh :', huh.target)}>
+			<div id = {styles.modes}>
 				<input 
 					type = "radio" 
 					className = { cx(styles.toolsButton, styles.modeInput)} 

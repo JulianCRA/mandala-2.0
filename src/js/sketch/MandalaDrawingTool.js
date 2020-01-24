@@ -21,7 +21,7 @@ class MandalaDrawingTool {
 
     fillArea({xpos, ypos, currentDrawing, placeHolder, newColor = this.color}){
         const initialColor = currentDrawing.get(xpos, ypos)
-
+    
         function matchWithInitial(color){
             return(
                 initialColor[0] === color[0] && 
@@ -31,16 +31,17 @@ class MandalaDrawingTool {
             )
         }
         
-        if(matchWithInitial(newColor)) return false 
+        if(matchWithInitial(newColor))
+            return false
 
-        let pixStack = [{x:xpos, y:ypos}]
+        let pixStack = [{x:Math.round(xpos), y:Math.round(ypos)}]
         let leftSideHasBeenChecked
         let rightSideHasBeenChecked
 
         placeHolder.clear()
         currentDrawing.loadPixels()
         placeHolder.loadPixels()
-
+        
         while(pixStack.length > 0){
             let pixel = pixStack.pop()
             leftSideHasBeenChecked = false
@@ -117,17 +118,15 @@ class MandalaDrawingTool {
             }
         }
 
-        
         placeHolder.updatePixels()
-        currentDrawing.updatePixels()
-        //currentDrawing.image(placeHolder, 0, 0)
+        //currentDrawing.updatePixels()
     }
 
     addVertex(xCoord, yCoord){
         this.points.push({x: xCoord - this.horizontalOffset, y:yCoord - this.verticalOffset})
     }
 
-	beginLine = (initialX, initialY) => {
+	beginLine(initialX, initialY){
         this.points = []
         this.addVertex(initialX, initialY)
     }
@@ -160,9 +159,6 @@ class MandalaDrawingTool {
     }
 
     applyLineCorrection(placeHolder, mode){
-        // console.log('mode', mode)
-        // console.log('this.points.length', this.points.length)
-        // console.log('this.sampleSize', this.sampleSize)
         let totalSamples = Math.ceil((this.sampleSize * this.points.length)-1)
         let samples = [this.points[0]]
         if(mode === 0)

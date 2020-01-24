@@ -49,9 +49,8 @@ const mandalaSketch = p => {
 	let showGuides
 	let antialias
 
-	let saveOptions
-
-	let isDrawing
+	let activeMouse = false
+	let activeTouch = false
 	
 	function initialize(config){
 		color = config.color
@@ -63,21 +62,17 @@ const mandalaSketch = p => {
 		showGuides = config.showGuides
 		antialias =  config.antialias
 
-		saveOptions = config.saveOptions
-
 		layers = []
 		buffer = []
 	}
 
 	p.preload = () => {}
 	p.setup = () => {
-		console.log("SETUP")
 		canvas = p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
+		p.pixelDensity(1)
+
 		canvas.mousePressed(p.pressed)
-		
-		// canvas.touchStarted(p.tStarted)
-		// canvas.touchEnded(p.tEnded)
-		// canvas.touchMoved(p.tMoved)
+		canvas.touchStarted(p.tStarted)
 
 		mdt = new MandalaDrawingTool({width: p.width, height: p.height, color, sections, reflect, antialias, strokeWidth, correctionAccuracy})
 
@@ -91,11 +86,11 @@ const mandalaSketch = p => {
 	}
 
 	//#region MOUSE EVENTS
-	/** MOUSE EVENTS */
 
 	p.pressed = () => {
+		console.log("M PRESS")
 		p.mouseReleased = p.released
-		isDrawing = true
+		activeMouse = true
 		if(mode !== modes._FILL){
 			p.mouseDragged = p.dragged
 			
@@ -112,7 +107,7 @@ const mandalaSketch = p => {
 	}
 
 	p.released = () => {
-		if(isDrawing){
+		if(activeMouse){
 			if(mode !== modes._FILL){
 				p.mouseDragged = null
 				p.mouseReleased = null
@@ -123,49 +118,57 @@ const mandalaSketch = p => {
 				mdt.fillArea({xpos:p.mouseX, ypos:p.mouseY, currentDrawing:current, placeHolder:feedback})
 			}
 			addLayer()
-			isDrawing = false
+			activeMouse = false
 		}	
 	}
 	//#endregion
 
-	//#region TOUCH EVENTS
-	/** TOUCH EVENTS */
-	/*
-	let activeTouch = false
+	//#region TOUCH EVENTS	
+	
 	p.tStarted = (event) => {
-		console.log('TOUCH start')
-		//console.log('huh', huh)
+		canvas.touchEnded(p.tEnded)
+		activeTouch = true
 		if(mode !== modes._FILL){
-			const touch = event.touches[0]
-			// const x = touch.pageX
-			// const y = touch.pageY
-			activeTouch = true
-			mdt.beginCurve(touch.pageX, touch.pageY)
+			canvas.touchMoved(p.tMoved)
+			
+			feedback.clear()
+			const touch = event.changedTouches[0]
+			mdt.beginLine(touch.pageX, touch.pageY)
 		}
 		return false
 	}
 	
-	p.tMoved = () => {
-		//if(activeTouch || true){
+	p.tMoved = (event) => {
+		event.preventDefault()
+		if(mode !== modes._FILL){
 			mdt.addVertex(p.mouseX, p.mouseY)
 			mdt.drawLine(feedback, mode)
 			mode === modes._STRAIGHT ? update() : null
 			p.image(feedback, 0, 0)
-		//}
+		}
 		return false
 	}
 
-	p.tEnded = () => {
-		if(mode !== modes._FILL){
-			console.log('TOUCH END')
-			if(activeTouch) activeTouch = false
-			mdt.endCurve(p.mouseX, p.mouseY)
-			current.image(feedback, 0, 0)	
+	p.tEnded = (event) => {
+		if(activeTouch){
+			if(mode !== modes._FILL){
+				p.mouseDragged = null
+				p.mouseReleased = null
+				mdt.endLine(p.mouseX, p.mouseY)
+				mdt.applyLineCorrection(feedback, mode)
+				current.image(feedback, 0, 0)
+			}else{
+				const touch = event.changedTouches[0]
+				mdt.fillArea({xpos:touch.pageX, ypos:touch.pageY, currentDrawing:current, placeHolder:feedback})
+
+			}
+			addLayer()
+			activeTouch = false
 		}
-		update()
+		event.preventDefault()
 		return false
 	}
-*/
+
 	//#endregion
 	
 	function update(){
@@ -173,14 +176,14 @@ const mandalaSketch = p => {
 		p.image(current, 0, 0)
 		if(showGuides)
 			p.image(guides, 0, 0)
+		p.image(feedback, p.width*0.6, p.height*0.6, p.width*0.2, p.height*0.2)
 	}
 
 	function addLayer(){
-		console.log("ADD LAYER")
 		layers.push({graphics:feedback.drawingContext.canvas.toDataURL("image/png"), mode:mode})
 		buffer.push(current.drawingContext.canvas.toDataURL("image/png"))
+		current.image(feedback, 0, 0)
 		update()
-		p.image(feedback, 50, 50, feedback.width * 0.3, feedback.height * 0.3)
 	}
 
 	function undo(){
@@ -247,8 +250,6 @@ const mandalaSketch = p => {
 
 			p.saveCanvas(temporaryCanvas, "mandala.png")
 		}
-		console.log(curves)
-		
 	}
 
 	p.customRedraw = config => {
