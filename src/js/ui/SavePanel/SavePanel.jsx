@@ -60,10 +60,14 @@ const SavePanel = ({ side, show }) => {
 			<button 
 				id = {styles.savebtn} 
 				className = {styles.toolsButton} 
-				onClick = {()=>setSaveConfig({lo:true, bot:false, fa:true})}
 				style = {{
 					background:  `url(${downloadBtn}) center no-repeat` 
 				}}
+				onClick = {()=>{
+					updateSettings({
+						type: actions._SAVE
+					})
+				}} 
 			/>
 		</div>
 	)

@@ -4,7 +4,8 @@ const actions = {
 	_CHANGE_VALUE : 1,
 	_TOGGLE_LINES_ONLY: 2,
 	_UNDO: 3,
-	_CLEAR: 4
+	_CLEAR: 4,
+	_SAVE: 5
 }
 
 const modes = {
@@ -45,6 +46,7 @@ const settingsReducer = (settings, action) => {
 		case actions._TOGGLE_LINES_ONLY:
 			return {
 				...settings,
+				state: "UPDATE_VALUE",
 				linesOnly: !settings.linesOnly,
 				blackLines: false,
 				forcedAlias: false
@@ -59,6 +61,11 @@ const settingsReducer = (settings, action) => {
 					...settings,
 					state: "CLEAR"
 				}
+		case actions._SAVE:
+			return {
+				...settings,
+				state: "SAVE"
+			}
 		default:
 			return settings
 

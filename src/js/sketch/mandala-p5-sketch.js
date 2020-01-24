@@ -49,6 +49,8 @@ const mandalaSketch = p => {
 	let showGuides
 	let antialias
 
+	let saveOptions
+
 	let isDrawing
 	
 	function initialize(config){
@@ -60,6 +62,8 @@ const mandalaSketch = p => {
 		reflect  = config.reflect
 		showGuides = config.showGuides
 		antialias =  config.antialias
+
+		saveOptions = config.saveOptions
 
 		layers = []
 		buffer = []
@@ -83,7 +87,7 @@ const mandalaSketch = p => {
 		guides = p.createGraphics(p.width, p.height)
 		drawGuides({container: guides, width: p.width, height: p.height, sections:sections})
 
-		p.update()
+		update()
 	}
 
 	//#region MOUSE EVENTS
@@ -103,7 +107,7 @@ const mandalaSketch = p => {
 	p.dragged = () => {
 		mdt.addVertex(p.mouseX, p.mouseY)
 		mdt.drawLine(feedback, mode)
-		mode === modes._STRAIGHT ? p.update() : null
+		mode === modes._STRAIGHT ? update() : null
 		p.image(feedback, 0, 0)
 	}
 
@@ -145,7 +149,7 @@ const mandalaSketch = p => {
 		//if(activeTouch || true){
 			mdt.addVertex(p.mouseX, p.mouseY)
 			mdt.drawLine(feedback, mode)
-			mode === modes._STRAIGHT ? p.update() : null
+			mode === modes._STRAIGHT ? update() : null
 			p.image(feedback, 0, 0)
 		//}
 		return false
@@ -158,13 +162,13 @@ const mandalaSketch = p => {
 			mdt.endCurve(p.mouseX, p.mouseY)
 			current.image(feedback, 0, 0)	
 		}
-		p.update()
+		update()
 		return false
 	}
 */
 	//#endregion
 	
-	p.update = () => {
+	function update(){
 		p.clear()
 		p.image(current, 0, 0)
 		if(showGuides)
@@ -175,7 +179,7 @@ const mandalaSketch = p => {
 		console.log("ADD LAYER")
 		layers.push({graphics:feedback.drawingContext.canvas.toDataURL("image/png"), mode:mode})
 		buffer.push(current.drawingContext.canvas.toDataURL("image/png"))
-		p.update()
+		update()
 		p.image(feedback, 50, 50, feedback.width * 0.3, feedback.height * 0.3)
 	}
 
@@ -184,7 +188,7 @@ const mandalaSketch = p => {
 		layers.pop()
 		buffer.pop()
 		if(layers.length <= 0) {
-			p.update()
+			update()
 			return
 		}	
 		
@@ -192,7 +196,7 @@ const mandalaSketch = p => {
 			buffer[buffer.length - 1], 
 			img => {
 				current.image(img, 0, 0)
-				p.update()
+				update()
 			}
 		)
 	}
@@ -201,7 +205,50 @@ const mandalaSketch = p => {
 		layers = []
 		buffer = []
 		current.clear()
-		p.update()
+		update()
+	}
+
+	function save({linesOnly, blackLines, forcedAlias}){
+		let curves
+		let temporaryCanvas		
+			
+		if(linesOnly){
+			curves = layers.filter( layer => layer.mode != 2 )
+			temporaryCanvas = p.createGraphics(p.width, p.height)
+			for(let i = 0; i < curves.length; i++)
+				p.loadImage(
+					curves[i].graphics, 
+					img => {
+						temporaryCanvas.image(img, 0, 0)
+						if(i === curves.length - 1)
+							applyFilters()
+					}
+				)
+		}else{
+			p.saveCanvas(current, "mandala.png")
+		}
+
+		function applyFilters(){
+			if(forcedAlias || blackLines){
+				temporaryCanvas.loadPixels()
+				for (let i = 0; i < temporaryCanvas.pixels.length; i += 4) {
+					if(temporaryCanvas.pixels[i+3] !== 0){
+						if(blackLines){
+							temporaryCanvas.pixels[i] = 0
+							temporaryCanvas.pixels[i+1] = 0
+							temporaryCanvas.pixels[i+2] = 0
+						}
+						if(forcedAlias)
+							temporaryCanvas.pixels[i+3] = 255
+					}
+				}		
+				temporaryCanvas.updatePixels()
+			}
+
+			p.saveCanvas(temporaryCanvas, "mandala.png")
+		}
+		console.log(curves)
+		
 	}
 
 	p.customRedraw = config => {
@@ -215,6 +262,9 @@ const mandalaSketch = p => {
 			case "CLEAR":
 				clear()
 			break
+			case "SAVE":
+				save(config)
+			break 
 			case "UPDATE_VALUE":
 				switch(config.attribute){
 					case "mode":
@@ -223,7 +273,7 @@ const mandalaSketch = p => {
 					case "sections":
 						mdt.setSections(config.sections)
 						drawGuides({container: guides, width: p.width, height: p.height, sections: config.sections})
-						p.update()
+						update()
 					break
 					case "color":
 						mdt.color = config.color
@@ -242,7 +292,7 @@ const mandalaSketch = p => {
 					break
 					case "showGuides":
 						showGuides = config.showGuides
-						p.update()
+						update()
 					break
 				}
 			break
