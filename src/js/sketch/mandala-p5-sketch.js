@@ -32,6 +32,8 @@ const modes = {
 const mandalaSketch = p => {
 	
 	let mdt
+	let layers
+	let buffer
 
 	let canvas
 	let guides
@@ -58,6 +60,9 @@ const mandalaSketch = p => {
 		reflect  = config.reflect
 		showGuides = config.showGuides
 		antialias =  config.antialias
+
+		layers = []
+		buffer = []
 	}
 
 	p.preload = () => {}
@@ -79,13 +84,6 @@ const mandalaSketch = p => {
 		drawGuides({container: guides, width: p.width, height: p.height, sections:sections})
 
 		p.update()
-	}
-
-	p.update = () => {
-		p.clear()
-		p.image(current, 0, 0)
-		if(showGuides)
-			p.image(guides, 0, 0)
 	}
 
 	//#region MOUSE EVENTS
@@ -110,18 +108,19 @@ const mandalaSketch = p => {
 	}
 
 	p.released = () => {
-		if(mode !== modes._FILL){
-			p.mouseDragged = null
-			p.mouseReleased = null
-			mdt.endLine(p.mouseX, p.mouseY)
-			mdt.applyLineCorrection(feedback, mode)
-			current.image(feedback, 0, 0)
-		}else{
-			if(isDrawing)
+		if(isDrawing){
+			if(mode !== modes._FILL){
+				p.mouseDragged = null
+				p.mouseReleased = null
+				mdt.endLine(p.mouseX, p.mouseY)
+				mdt.applyLineCorrection(feedback, mode)
+				current.image(feedback, 0, 0)
+			}else{
 				mdt.fillArea({xpos:p.mouseX, ypos:p.mouseY, currentDrawing:current, placeHolder:feedback})
-		}
-		isDrawing = false
-		p.update()
+			}
+			addLayer()
+			isDrawing = false
+		}	
 	}
 	//#endregion
 
@@ -165,15 +164,57 @@ const mandalaSketch = p => {
 */
 	//#endregion
 	
+	p.update = () => {
+		p.clear()
+		p.image(current, 0, 0)
+		if(showGuides)
+			p.image(guides, 0, 0)
+	}
+
+	function addLayer(){
+		console.log("ADD LAYER")
+		layers.push({graphics:feedback.drawingContext.canvas.toDataURL("image/png"), mode:mode})
+		buffer.push(current.drawingContext.canvas.toDataURL("image/png"))
+		p.update()
+		p.image(feedback, 50, 50, feedback.width * 0.3, feedback.height * 0.3)
+	}
+
+	function undo(){
+		current.clear()
+		layers.pop()
+		buffer.pop()
+		if(layers.length <= 0) {
+			p.update()
+			return
+		}	
+		
+		p.loadImage(
+			buffer[buffer.length - 1], 
+			img => {
+				current.image(img, 0, 0)
+				p.update()
+			}
+		)
+	}
+
+	function clear(){
+		layers = []
+		buffer = []
+		current.clear()
+		p.update()
+	}
+
 	p.customRedraw = config => {
-		console.log("CUSTOM")
-		console.log(config. state, config.attribute, config[config.attribute])
 		switch(config.state){
 			case "INITIALIZE":
 				initialize(config)
 			break
-			
-			
+			case "UNDO":
+				undo()
+			break
+			case "CLEAR":
+				clear()
+			break
 			case "UPDATE_VALUE":
 				switch(config.attribute){
 					case "mode":

@@ -15,7 +15,6 @@ const DrawPanel = ({ side, show }) => {
 	const { settings, updateSettings } = React.useContext( mandalaContext )
 	
 	const setMode = mode => {
-		console.log('settings :', settings.mode);
 		updateSettings({
 			type: actions._CHANGE_VALUE,
 			attribute: "mode",

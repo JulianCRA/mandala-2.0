@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import { mandalaContext } from '../../context/MandalaProvider'
+import { mandalaContext, actions } from '../../context/MandalaProvider'
 
 import DrawPanel from '../DrawPanel'
 import SavePanel from  '../SavePanel'
@@ -70,6 +70,12 @@ const Controls = ({ side }) => {
 					style = {{
 						background: `url(${undoBtn}) center no-repeat` 
 					}}
+					onClick = { event => {
+						event.preventDefault()
+						updateSettings({
+							type: actions._UNDO
+						})
+					}}
 				/>
 				
 				<button 
@@ -80,6 +86,9 @@ const Controls = ({ side }) => {
 					onClick = { event => {
 						event.preventDefault()
 						console.log('settings', settings)
+						updateSettings({
+							type: actions._CLEAR
+						})
 					}}
 				/>
 			</div>

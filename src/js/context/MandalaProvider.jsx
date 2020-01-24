@@ -3,9 +3,8 @@ import React, { useReducer } from 'react'
 const actions = {
 	_CHANGE_VALUE : 1,
 	_TOGGLE_LINES_ONLY: 2,
-	_CHANGE_COLOR: 3,
-	_SET_MODE: 4,
-	_SET_SECTIONS: 5
+	_UNDO: 3,
+	_CLEAR: 4
 }
 
 const modes = {
@@ -50,13 +49,15 @@ const settingsReducer = (settings, action) => {
 				blackLines: false,
 				forcedAlias: false
 			}
-		case actions._CHANGE_COLOR:
-			return settings.color === action.value ?
-				settings :
-				{
+		case actions._UNDO:
+			return {
 					...settings,
-					color: action.value,
-					state: "CHANGE_COLOR"
+					state: "UNDO"
+				}
+		case actions._CLEAR:
+			return {
+					...settings,
+					state: "CLEAR"
 				}
 		default:
 			return settings
