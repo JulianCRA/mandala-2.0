@@ -39,7 +39,7 @@ class MandalaDrawingTool {
         let pixStack = [{x:Math.round(xpos)*d, y:Math.round(ypos)*d}]  //// *d may be passed from call
         let leftSideHasBeenChecked
         let rightSideHasBeenChecked
-
+        let pixelPosition
         placeHolder.clear()
         currentDrawing.loadPixels()
         placeHolder.loadPixels()
@@ -51,19 +51,18 @@ class MandalaDrawingTool {
             
             while(pixel.y >= 0){
                 pixel.y--
-                const pixelPosition = (pixel.y * placeHolder.width * d + pixel.x) * 4
+                pixelPosition = (pixel.y * placeHolder.width * d + pixel.x) * 4
                 if(!matchWithInitial([
                     currentDrawing.pixels[pixelPosition], 
                     currentDrawing.pixels[pixelPosition + 1], 
                     currentDrawing.pixels[pixelPosition + 2], 
                     currentDrawing.pixels[pixelPosition + 3]
                 ])) break
-                aux++
             }
 
             while(pixel.y < (placeHolder.height  * d) ){
                 pixel.y++
-                const pixelPosition = (pixel.y * placeHolder.width * d + pixel.x) * 4
+                pixelPosition = (pixel.y * placeHolder.width * d + pixel.x) * 4
                 if(!matchWithInitial([
                     currentDrawing.pixels[pixelPosition], 
                     currentDrawing.pixels[pixelPosition + 1], 
@@ -80,10 +79,9 @@ class MandalaDrawingTool {
                 currentDrawing.pixels[pixelPosition+1] = this.color[1]
                 currentDrawing.pixels[pixelPosition+2] = this.color[2]
                 currentDrawing.pixels[pixelPosition+3] = this.color[3]
-                aux2++
                 
                 if(pixel.x > 0){
-                    const pixelPosition = (pixel.y * placeHolder.width * d + (pixel.x - 1)) * 4
+                    pixelPosition = (pixel.y * placeHolder.width * d + (pixel.x - 1)) * 4
                     if(matchWithInitial([
                         currentDrawing.pixels[pixelPosition], 
                         currentDrawing.pixels[pixelPosition + 1], 
@@ -102,7 +100,7 @@ class MandalaDrawingTool {
                 }
 
                 if(pixel.x < ((placeHolder.width - 1) * d) ){
-                    const pixelPosition = (pixel.y * placeHolder.width*d  + (pixel.x + 1)) * 4
+                    pixelPosition = (pixel.y * placeHolder.width*d  + (pixel.x + 1)) * 4
                     if(matchWithInitial([
                         currentDrawing.pixels[pixelPosition], 
                         currentDrawing.pixels[pixelPosition + 1], 

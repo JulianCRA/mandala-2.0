@@ -176,7 +176,6 @@ const mandalaSketch = p => {
 		p.image(current, 0, 0)
 		if(showGuides)
 			p.image(guides, 0, 0)
-		p.image(feedback, p.width*0.6, p.height*0.6, p.width*0.2, p.height*0.2)
 	}
 
 	function addLayer(){
@@ -198,7 +197,7 @@ const mandalaSketch = p => {
 		p.loadImage(
 			buffer[buffer.length - 1], 
 			img => {
-				current.image(img, 0, 0)
+				current.image(img, 0, 0, p.width, p.height)
 				update()
 			}
 		)
