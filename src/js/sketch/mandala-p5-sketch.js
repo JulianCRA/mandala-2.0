@@ -180,8 +180,9 @@ const mandalaSketch = p => {
 
 	function addLayer(){
 		layers.push({graphics:feedback.drawingContext.canvas.toDataURL("image/png"), mode:mode})
-		buffer.push(current.drawingContext.canvas.toDataURL("image/png"))
 		current.image(feedback, 0, 0)
+		buffer.push(current.drawingContext.canvas.toDataURL("image/png"))
+		
 		update()
 	}
 

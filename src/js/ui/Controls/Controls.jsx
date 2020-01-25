@@ -23,7 +23,7 @@ const Controls = ({ side }) => {
 	
 	const [ showConfigPanel, toggleConfigPanel ] = React.useState(()=>false)
 	const [ showSavePanel, toggleSavePanel ] = React.useState(()=>false)
-	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>false)
+	const [ showDrawPanel, toggleDrawPanel ] = React.useState(()=>true)
 
 	return (
 		<div className = { cx(styles.controls, styles[side]) } >
