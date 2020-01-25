@@ -69,7 +69,7 @@ const mandalaSketch = p => {
 	p.preload = () => {}
 	p.setup = () => {
 		canvas = p.createCanvas(p._userNode.clientWidth, p._userNode.clientHeight)
-		p.pixelDensity(1)
+		//p.pixelDensity(1)
 
 		canvas.mousePressed(p.pressed)
 		canvas.touchStarted(p.tStarted)

@@ -26,15 +26,17 @@ class MandalaDrawingTool {
             return(
                 initialColor[0] === color[0] && 
                 initialColor[1] === color[1] && 
-                initialColor[2] === color[2] && 
-                initialColor[3] === color[3]
+                initialColor[2] === color[2] 
+                //&& initialColor[3] === color[3]
             )
         }
         
         if(matchWithInitial(newColor))
             return false
-
-        let pixStack = [{x:Math.round(xpos), y:Math.round(ypos)}]
+        
+        
+        let d = placeHolder.pixelDensity()
+        let pixStack = [{x:Math.round(xpos)*d, y:Math.round(ypos)*d}]  //// *d may be passed from call
         let leftSideHasBeenChecked
         let rightSideHasBeenChecked
 
@@ -49,18 +51,19 @@ class MandalaDrawingTool {
             
             while(pixel.y >= 0){
                 pixel.y--
-                const pixelPosition = (pixel.y * placeHolder.width + pixel.x) * 4
+                const pixelPosition = (pixel.y * placeHolder.width * d + pixel.x) * 4
                 if(!matchWithInitial([
                     currentDrawing.pixels[pixelPosition], 
                     currentDrawing.pixels[pixelPosition + 1], 
                     currentDrawing.pixels[pixelPosition + 2], 
                     currentDrawing.pixels[pixelPosition + 3]
                 ])) break
+                aux++
             }
 
-            while(pixel.y < placeHolder.height - 1){
-                pixel.y++;
-                const pixelPosition = (pixel.y * placeHolder.width + pixel.x) * 4
+            while(pixel.y < (placeHolder.height  * d) ){
+                pixel.y++
+                const pixelPosition = (pixel.y * placeHolder.width * d + pixel.x) * 4
                 if(!matchWithInitial([
                     currentDrawing.pixels[pixelPosition], 
                     currentDrawing.pixels[pixelPosition + 1], 
@@ -68,18 +71,19 @@ class MandalaDrawingTool {
                     currentDrawing.pixels[pixelPosition + 3]
                 ])) break
 
-                placeHolder.pixels[pixelPosition] = this.color[0]
+                placeHolder.pixels[pixelPosition]   = this.color[0]
                 placeHolder.pixels[pixelPosition+1] = this.color[1]
                 placeHolder.pixels[pixelPosition+2] = this.color[2]
                 placeHolder.pixels[pixelPosition+3] = this.color[3]
 
-                currentDrawing.pixels[pixelPosition] = this.color[0]
+                currentDrawing.pixels[pixelPosition]   = this.color[0]
                 currentDrawing.pixels[pixelPosition+1] = this.color[1]
                 currentDrawing.pixels[pixelPosition+2] = this.color[2]
                 currentDrawing.pixels[pixelPosition+3] = this.color[3]
-
+                aux2++
+                
                 if(pixel.x > 0){
-                    let pixelPosition = (pixel.y * placeHolder.width + (pixel.x - 1)) * 4
+                    const pixelPosition = (pixel.y * placeHolder.width * d + (pixel.x - 1)) * 4
                     if(matchWithInitial([
                         currentDrawing.pixels[pixelPosition], 
                         currentDrawing.pixels[pixelPosition + 1], 
@@ -97,8 +101,8 @@ class MandalaDrawingTool {
                     }
                 }
 
-                if(pixel.x < placeHolder.width - 1){
-                    let pixelPosition = (pixel.y * placeHolder.width + (pixel.x + 1)) * 4
+                if(pixel.x < ((placeHolder.width - 1) * d) ){
+                    const pixelPosition = (pixel.y * placeHolder.width*d  + (pixel.x + 1)) * 4
                     if(matchWithInitial([
                         currentDrawing.pixels[pixelPosition], 
                         currentDrawing.pixels[pixelPosition + 1], 
@@ -117,9 +121,7 @@ class MandalaDrawingTool {
                 }
             }
         }
-
         placeHolder.updatePixels()
-        //currentDrawing.updatePixels()
     }
 
     addVertex(xCoord, yCoord){

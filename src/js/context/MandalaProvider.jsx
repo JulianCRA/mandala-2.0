@@ -16,7 +16,7 @@ const modes = {
 
 const initialSettings = {
 	color: [255, 255, 255, 255],
-	mode: modes._FREE_HAND,
+	mode: modes._FILL,
 	sections: 16,
 	correctionAccuracy: 0.15,
 	strokeWidth: 5,
