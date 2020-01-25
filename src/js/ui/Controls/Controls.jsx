@@ -29,19 +29,21 @@ const Controls = ({ side }) => {
 		<div className = { cx(styles.controls, styles[side]) } >
 			<div className = { cx(styles.quickaccess, styles[side]) } >
 				<button 
-					className = {styles.toolsButton}
+					className = { cx(styles.toolsButton, showDrawPanel?styles.toolsButtonCurrent:null) }
 					onClick = { () => {
 						toggleDrawPanel(!showDrawPanel)
 						toggleSavePanel(false)
 						toggleConfigPanel(false)
+						
 					}}
 					style = {{
 						background:  `url(${showDrawPanel? closeBtn : toolBtn}) center no-repeat` 
 					}}
+					autoFocus = {false}
 				/>
 
 				<button 
-					className = {styles.toolsButton}
+					className = { cx(styles.toolsButton, showConfigPanel?styles.toolsButtonCurrent:null) }
 					onClick = { () => {
 						toggleConfigPanel(!showConfigPanel)
 						toggleSavePanel(false)
@@ -54,7 +56,7 @@ const Controls = ({ side }) => {
 		
 		
 				<button 
-					className={styles.toolsButton}
+					className = { cx(styles.toolsButton, showSavePanel?styles.toolsButtonCurrent:null) }
 					onClick = { () => {
 						toggleSavePanel(!showSavePanel)
 						toggleConfigPanel(false)

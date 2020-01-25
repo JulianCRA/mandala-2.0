@@ -63,14 +63,22 @@
     outline: none;
     cursor: pointer;
 }
-.tools-button:hover {
-	border-color: #ffffff;
-    border-width: 2px;
-    border-style: solid;
+@media (hover: hover) {
+    .tools-button:hover {
+        border-color: #ffffff;
+        border-width: 2px;
+        border-style: solid;
+    }
 }
+
 .tools-button:active {
 	position:relative;
 	top:1px;
+}
+.tools-button-current{
+    border-color: #ffffff;
+    border-width: 3px;
+    border-style: solid;
 }
 
 /*---------------------------*/
