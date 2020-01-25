@@ -217,7 +217,8 @@ const mandalaSketch = p => {
 			
 		if(linesOnly){
 			curves = layers.filter( layer => layer.mode != 2 )
-			temporaryCanvas = p.createGraphics(p.width, p.height)
+			temporaryCanvas = p.createGraphics(p.width*p.pixelDensity(), p.height*p.pixelDensity())
+			temporaryCanvas.pixelDensity(1)
 			for(let i = 0; i < curves.length; i++)
 				p.loadImage(
 					curves[i].graphics, 
