@@ -75,5 +75,5 @@ module.exports = {
 		//new BundleAnalyzerPlugin()
 	],
 
-	devtool: "source-map"
+	// devtool: "source-map"
 };

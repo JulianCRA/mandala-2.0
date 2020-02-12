@@ -4,8 +4,9 @@
   "description": "Simple tool to make 'mandala-like' drawings",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open --mode development --host 0.0.0.0",
-    "build": "webpack --mode production"
+    "start": "webpack-dev-server --mode development --open --hot --config webpack.dev.js --host 0.0.0.0",
+    "build": "webpack --mode production --config webpack.prod.js",
+    "build:serve": "webpack --mode production --config webpack.prod.js && serve dist"
   },
   "repository": {
     "type": "git",
